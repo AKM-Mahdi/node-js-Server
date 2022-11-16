@@ -38,12 +38,6 @@ async function run() {
 }
 
 run().catch((err) => console.log(err));
-// client.connect((err) => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   console.log("db connected")
-//   client.close();
-// });
 
 app.get("/", (req, res) => {
   res.send("hi");
@@ -52,18 +46,6 @@ app.get("/users", (req, res) => {
   res.send(users);
 });
 
-// app.post("/users", (req, res) => {
-//   console.log("Post method called");
-//   const user = req.body;
-//   user.id = users.length + 1;
-//   users.push(user);
-//   res.send(users);
-//   console.log(user);
-// });
 app.listen(port, () => {
   console.log("Example app listening on port ");
 });
-
-// mongo db access
-// UsersDB
-// W9mckJidO93lGD8Q

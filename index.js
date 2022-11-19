@@ -20,8 +20,15 @@ async function run() {
   try {
     const userCollection = client.db("simpledb").collection("users");
 
+    // app.get("/users", async (req, res) => {
+    //   const cursor = userCollection.find({});
+    //   const users = await cursor.toArray();
+    //   res.send(users);
+    // });
+
     app.get("/users", async (req, res) => {
-      const cursor = userCollection.find({});
+      const query = {};
+      const cursor = userCollection.find(query);
       const users = await cursor.toArray();
       res.send(users);
     });

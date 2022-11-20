@@ -27,6 +27,31 @@ async function run() {
       res.send(users);
     });
 
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const user = await userCollection.findOne(query);
+      res.send(user);
+    });
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: ObjectId(id) };
+      const user = req.body;
+      const options = { upsert: true };
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          email: user.email,
+          address: user.address,
+        },
+      };
+      const result = await userCollection.updateOne(
+        filter,
+        updatedUser,
+        options
+      );
+      res.send(result);
+    });
     app.post("/users", async (req, res) => {
       console.log("Post method called");
       const user = req.body;
@@ -37,7 +62,7 @@ async function run() {
 
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
-      // console.log("trying to delete ", id);
+
       const query = { _id: ObjectId(id) };
       const result = await userCollection.deleteOne(query);
       if (result.deletedCount === 1) {

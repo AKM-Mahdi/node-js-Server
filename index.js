@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -20,12 +20,6 @@ async function run() {
   try {
     const userCollection = client.db("simpledb").collection("users");
 
-    // app.get("/users", async (req, res) => {
-    //   const cursor = userCollection.find({});
-    //   const users = await cursor.toArray();
-    //   res.send(users);
-    // });
-
     app.get("/users", async (req, res) => {
       const query = {};
       const cursor = userCollection.find(query);
@@ -39,6 +33,19 @@ async function run() {
       const result = await userCollection.insertOne(user);
       user.id = result.insertedId;
       res.send(user);
+    });
+
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      // console.log("trying to delete ", id);
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      if (result.deletedCount === 1) {
+        console.log("Successfully deleted one document.");
+      } else {
+        console.log("No documents matched the query. Deleted 0 documents.");
+      }
+      res.send(result);
     });
   } finally {
   }
